@@ -1,11 +1,7 @@
 package buzzdev.entities;
 
 import org.lwjgl.util.vector.Vector3f;
-
 import buzzdev.models.TexturedModel;
-
-
-
 
 public class Entity {
 
