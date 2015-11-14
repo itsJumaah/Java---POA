@@ -2,6 +2,10 @@ package buzzdev;
 
 import org.lwjgl.opengl.Display;
 
+<<<<<<< Updated upstream
+=======
+import buzzdev.entities.Entity;
+>>>>>>> Stashed changes
 import buzzdev.models.RawModel;
 import buzzdev.models.TexturedModel;
 import buzzdev.render.DisplayManager;
@@ -43,8 +47,17 @@ public class MainGameLoop {
 		RawModel model = loader.loadToVAO(vertices, textureCoord, indices);
 		ModelTexture texture = new ModelTexture(loader.loadTexture("box"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
+<<<<<<< Updated upstream
 		
 		while(!Display.isCloseRequested()) {
+=======
+		Entity entity = new Entity(texturedModel, null, 0, 0, 0, 0);
+		while(!Display.isCloseRequested()) {
+
+			entity.increaseRotation(0, 1, 1);
+			camera.move();
+
+>>>>>>> Stashed changes
 			render.prepare();
 			shader.start();
 			render.render(texturedModel);
