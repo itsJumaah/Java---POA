@@ -1,5 +1,9 @@
 package buzzdev;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -10,9 +14,9 @@ import buzzdev.models.RawModel;
 import buzzdev.models.TexturedModel;
 import buzzdev.render.DisplayManager;
 import buzzdev.render.Loader;
+import buzzdev.render.MasterRender;
 import buzzdev.render.OBJLoader;
-import buzzdev.render.Render;
-import buzzdev.shaders.StaticShader;
+import buzzdev.terrain.Terrain;
 import buzzdev.texture.ModelTexture;
 
 
@@ -23,38 +27,51 @@ public class MainGameLoop {
 		DisplayManager.createDisplay();
 		
 		Loader loader = new Loader();
-		StaticShader shader = new StaticShader();
-		Render render = new Render(shader);
 		
-		RawModel rawModel = OBJLoader.loadObjModel("dragon", loader);
-		TexturedModel texturedModel = new TexturedModel(rawModel, new ModelTexture(loader.loadTexture("dragonT")));
+		
+		RawModel rawModel = OBJLoader.loadObjModel("palm2", loader);
+		TexturedModel texturedModel = new TexturedModel(rawModel, new ModelTexture(loader.loadTexture("palm2")));
 		
 		ModelTexture texture = texturedModel.getTexture();
 		texture.setShineDamper(20);
 		texture.setReflectivity(10);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -50), 0, 0, 0, 1);
+		//Entity entity = new Entity(texturedModel, new Vector3f(0, -10, -250), 0, 0, 0, 1);
 		
-		Light light = new Light(new Vector3f(0,0,0), new Vector3f(1,1,0)); //Light pos xyz and color rgb
+		Light light = new Light(new Vector3f(3000,2000,2000), new Vector3f(1,1,1)); //Light pos xyz and color rgb
 		
 		Camera camera = new Camera();
 		
+		Terrain terrain = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
 		
+		MasterRender render = new MasterRender();
+		
+		List<Entity> trees = new ArrayList<Entity>();
+		Random rand = new Random();
+		for(int i=0; i<50; i++) {
+			float x = rand.nextFloat() * 1000;
+			float y = -10;
+			float z = rand.nextFloat() * -1000;
+			trees.add(new Entity(texturedModel, new Vector3f(x, y, z), 0, 0, 0, 1));
+		}
 		
 		while(!Display.isCloseRequested()) {
-			entity.increaseRotation(0, 1, 0);
 			camera.move();
-			render.prepare();
-			shader.start();
-			shader.loadLight(light);
-			shader.loadViewMatrix(camera);
+			//entity.increaseRotation(0, 1, 0);
 			
-			render.render(entity, shader);
-			shader.stop();
+			for(Entity tree: trees) {
+				render.procEntity(tree);
+			}
+			
+			
+			render.procTerrain(terrain);
+			render.procTerrain(terrain2);
+			render.render(light, camera);
 			DisplayManager.updateDisplay();
 		}
 		
-		shader.cleanUp();
+		render.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
 
