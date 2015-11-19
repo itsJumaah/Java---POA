@@ -12,15 +12,16 @@ import buzzdev.entities.Entity;
 import buzzdev.entities.Light;
 import buzzdev.models.RawModel;
 import buzzdev.models.TexturedModel;
+import buzzdev.obj.ModelData;
+import buzzdev.obj.OBJFileLoader;
 import buzzdev.render.DisplayManager;
 import buzzdev.render.Loader;
 import buzzdev.render.MasterRender;
-import buzzdev.render.OBJLoader;
 import buzzdev.terrain.Terrain;
 import buzzdev.texture.ModelTexture;
 
 
-public class MainGameLoop {
+public class PoA {
 
 	public static void main(String[] args) {
 		
@@ -28,17 +29,21 @@ public class MainGameLoop {
 		
 		Loader loader = new Loader();
 		
+		ModelData data = OBJFileLoader.loadOBJ("palm");
 		
-		RawModel rawModel = OBJLoader.loadObjModel("palm2", loader);
-		TexturedModel texturedModel = new TexturedModel(rawModel, new ModelTexture(loader.loadTexture("palm2")));
+		RawModel rawModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
 		
-		ModelTexture texture = texturedModel.getTexture();
+		TexturedModel palm = new TexturedModel(rawModel, new ModelTexture(loader.loadTexture("palm")));
+		palm.getTexture().setHasTransparency(true);
+		palm.getTexture().setFakeLighting(true);
+		
+		ModelTexture texture = palm.getTexture();
 		texture.setShineDamper(20);
 		texture.setReflectivity(10);
 		
 		//Entity entity = new Entity(texturedModel, new Vector3f(0, -10, -250), 0, 0, 0, 1);
 		
-		Light light = new Light(new Vector3f(3000,2000,2000), new Vector3f(1,1,1)); //Light pos xyz and color rgb
+		Light light = new Light(new Vector3f(30,20,20), new Vector3f(1,1,1)); //Light pos xyz and color rgb
 		
 		Camera camera = new Camera();
 		
@@ -53,7 +58,7 @@ public class MainGameLoop {
 			float x = rand.nextFloat() * 1000;
 			float y = -10;
 			float z = rand.nextFloat() * -1000;
-			trees.add(new Entity(texturedModel, new Vector3f(x, y, z), 0, 0, 0, 1));
+			trees.add(new Entity(palm, new Vector3f(x, y, z), 0, 0, 0, 1));
 		}
 		
 		while(!Display.isCloseRequested()) {

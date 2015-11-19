@@ -9,20 +9,36 @@ out vec2 pass_textureCoord;
 out vec3 surfaceNormal;
 out vec3 toLightVector;
 out vec3 toCameraVector;
+out float visibility;
 
 uniform mat4 transMatrix;
 uniform mat4 projMatrix;
 uniform mat4 viewMatrix;
 uniform vec3 lightPos;
 
+uniform float fakeLighting;
+
+const float den = 0.002;
+const float grad = 7.0;
+
 void main(void) {
 	
 	vec4 worldPos = transMatrix * vec4(position, 1.0);
+	vec4 posRelativeToCam = viewMatrix * worldPos;
 	
-	gl_Position = projMatrix * viewMatrix * worldPos;
+	gl_Position = projMatrix * posRelativeToCam;
 	pass_textureCoord = textureCoord;
 	
-	surfaceNormal = (transMatrix * vec4(normal, 0.0)).xyz;
+	vec3 actualNormal = normal;
+	if(fakeLighting > 0.5) {
+		actualNormal = vec3(0.0, 1.0, 0.0);
+	}
+	
+	surfaceNormal = (transMatrix * vec4(actualNormal, 0.0)).xyz;
 	toLightVector = lightPos - worldPos.xyz;
 	toCameraVector = (inverse(viewMatrix) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPos.xyz;
+	
+	float dis = length(posRelativeToCam.xyz);
+	visibility = exp(-pow((dis*den),grad));
+	visibility = clamp(visibility, 0.0, 1.0);
 }
