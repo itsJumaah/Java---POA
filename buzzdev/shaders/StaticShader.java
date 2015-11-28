@@ -9,8 +9,8 @@ import buzzdev.toolbox.Maths;
 
 public class StaticShader extends ShaderProgram{
 
-	private static final String VERTEX_FILE = "src/buzzdev/shaders/vertexShader.txt";
-	private static final String FRAGMENT_FILE = "src/buzzdev/shaders/fragmentShader.txt";
+	private static final String VERTEX_FILE = "src/buzzdev/shaders/vertexShader.buzz";
+	private static final String FRAGMENT_FILE = "src/buzzdev/shaders/fragmentShader.buzz";
 	
 	private int locationTransMatrix;
 	private int locationProjMatrix;

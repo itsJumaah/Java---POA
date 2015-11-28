@@ -25,7 +25,7 @@ void main(void) {
 	vec4 posRelativeToCam = viewMatrix * worldPos;
 	
 	gl_Position = projMatrix * posRelativeToCam;
-	pass_textureCoord = textureCoord * 50.0;
+	pass_textureCoord = textureCoord;
 	
 	surfaceNormal = (transMatrix * vec4(normal, 0.0)).xyz;
 	toLightVector = lightPos - worldPos.xyz;
