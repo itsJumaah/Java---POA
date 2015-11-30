@@ -7,6 +7,7 @@ import java.util.Random;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import buzzdev.entities.Buzz;
 import buzzdev.entities.Camera;
 import buzzdev.entities.Entity;
 import buzzdev.entities.Light;
@@ -50,8 +51,11 @@ public class PoA {
 		
 		TexturedModel texturedPalm = new TexturedModel(rawPalm, new ModelTexture(loader.loadTexture("palm")));
 		
-		texturedPalm.getTexture().setHasTransparency(true);
-		texturedPalm.getTexture().setFakeLighting(true);
+		texturedPalm.getTexture().setHasTransparency(true); //no culling
+		texturedPalm.getTexture().setFakeLighting(true); //make all lights even(not shiny)
+//		ModelTexture texture = texturedPalm.getTexture();
+//		texture.setShineDamper(20); //make it shiny
+//		texture.setReflectivity(10); //make it shiny
 		
 		//----------------------------------------------
 		
@@ -65,12 +69,7 @@ public class PoA {
 		}
 		
 		//----------------------------------------------
-		
-		ModelTexture texture = texturedPalm.getTexture();
-		texture.setShineDamper(20);
-		texture.setReflectivity(10);
-		
-		//----------------------------------------------
+
 		
 		Light light = new Light(new Vector3f(3000,2000,2000), new Vector3f(1,1,1)); //Light pos xyz and color rgb
 		
@@ -79,9 +78,21 @@ public class PoA {
 		
 		
 		//----------------------------------------------
+		
+		ModelData dragonData = OBJFileLoader.loadOBJ("dragon");
+		RawModel dragonModel = loader.loadToVAO(dragonData.getVertices(), dragonData.getTextureCoords(), dragonData.getNormals(), dragonData.getIndices());
+		
+		TexturedModel dragon = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("mud")));
+		
+		Buzz buzz = new Buzz(dragon, new Vector3f(1,-10,-10), 0, 0, 0, 1);
+		
+
+		
+		//----------------------------------------------
 		while(!Display.isCloseRequested()) {
 			camera.move();
-			
+			buzz.move();
+			render.procEntity(buzz);
 			for(Entity tree: trees) {
 				render.procEntity(tree);
 			}

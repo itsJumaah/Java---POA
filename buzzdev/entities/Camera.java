@@ -14,25 +14,25 @@ public class Camera {
 	}
 
 	public void move() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			pos.z += 1.02f;
-		}
-		//----
-		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
-			pos.z -= 1.02f;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			pos.x += 1.02f;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
-			pos.x -= 1.02f;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			pos.y -= 1.02f;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-			pos.y += 1.02f;
-		}
+//		if(Keyboard.isKeyDown(Keyboard.KEY_S)) {
+//			pos.z += 1.02f;
+//		}
+//		//----
+//		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
+//			pos.z -= 1.02f;
+//		}
+//		if(Keyboard.isKeyDown(Keyboard.KEY_D)) {
+//			pos.x += 1.02f;
+//		}
+//		if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
+//			pos.x -= 1.02f;
+//		}
+//		if(Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+//			pos.y -= 1.02f;
+//		}
+//		if(Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+//			pos.y += 1.02f;
+//		}
 	}
 	
 	public Vector3f getPos() {
