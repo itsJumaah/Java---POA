@@ -72,8 +72,6 @@ public class PoA {
 
 		
 		Light light = new Light(new Vector3f(3000,2000,2000), new Vector3f(1,1,1)); //Light pos xyz and color rgb
-		
-		Camera camera = new Camera();
 		MasterRender render = new MasterRender();
 		
 		
@@ -86,7 +84,7 @@ public class PoA {
 		
 		Buzz buzz = new Buzz(dragon, new Vector3f(1,-10,-10), 0, 0, 0, 1);
 		
-
+		Camera camera = new Camera(buzz);
 		
 		//----------------------------------------------
 		while(!Display.isCloseRequested()) {
