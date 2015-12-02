@@ -83,7 +83,7 @@ public class TerrainRender {
 	}
 	
 	private void loadModelMatrix(Terrain terrain) {
-		Matrix4f transMatix = Maths.createTransMatrix(new Vector3f(terrain.getX(), -10, terrain.getZ()), 0, 
+		Matrix4f transMatix = Maths.createTransMatrix(new Vector3f(terrain.getX(), 0, terrain.getZ()), 0, 
 				0, 0, 1);
 		
 		shader.loadTransMatrix(transMatix);

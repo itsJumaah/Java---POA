@@ -5,14 +5,14 @@ import org.lwjgl.util.vector.Vector3f;
 
 import buzzdev.models.TexturedModel;
 import buzzdev.render.DisplayManager;
+import buzzdev.terrain.Terrain;
 
 public class Buzz extends Entity{
 	
-	private static final float RUN_SPEED      = 20;   //units per seconds
-	private static final float TURN_SPEED     = 160; //degress per seconds
+	private static final float RUN_SPEED      = 50;   //units per seconds
+	private static final float TURN_SPEED     = 70; //degress per seconds
 	private static final float GRAVITY        = -50;
 	private static final float JUMP_POWER	  = 30;
-	private static final float TERRAIN_HEIGHT = -10;
 	
 	private float curSpeed    = 0;
 	private float curTurn     = 0;
@@ -23,10 +23,9 @@ public class Buzz extends Entity{
 	public Buzz(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		
-		
 	}
-
-	public void move() {
+	//----------------------------------------
+	public void move(Terrain terrain) {
 		checkInputs();
 		
 		super.increaseRotation(0, curTurn * DisplayManager.getFrameTimeSeconds(), 0);
@@ -39,13 +38,15 @@ public class Buzz extends Entity{
 		upwardSpeed += GRAVITY * DisplayManager.getFrameTimeSeconds();
 		float dy = upwardSpeed * DisplayManager.getFrameTimeSeconds();
 		super.increasePosition(0, dy, 0);
-		if(super.getPosition().y < TERRAIN_HEIGHT) {
+		
+		float terrainHeight = terrain.getTerrainHeight(super.getPosition().x, super.getPosition().z);
+		if(super.getPosition().y < terrainHeight) {
 			upwardSpeed = 0;
 			midAir = false;
-			super.getPosition().y = TERRAIN_HEIGHT;
+			super.getPosition().y = terrainHeight;
 		}
 	}
-
+	//----------------------------------------
 	private void jump() {
 		if(midAir != true) {
 			this.upwardSpeed = JUMP_POWER;
@@ -53,7 +54,7 @@ public class Buzz extends Entity{
 		}
 	}
 	private void checkInputs() {
-		//-----------FORWARD AND BACKWARD---------
+	//-----------FORWARD AND BACKWARD---------
 		if(Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			this.curSpeed = RUN_SPEED;
 		}
@@ -64,7 +65,7 @@ public class Buzz extends Entity{
 			this.curSpeed = 0; 
 		}
 		
-		//------------LEFT AND RIGHT---------------
+	//------------LEFT AND RIGHT---------------
 		if(Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			this.curTurn = TURN_SPEED;
 		}
@@ -75,7 +76,7 @@ public class Buzz extends Entity{
 			this.curTurn = 0;
 		}
 		
-		//------------JUMP ---------------
+	//------------JUMP ---------------
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			jump();
 		}

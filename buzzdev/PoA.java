@@ -41,8 +41,8 @@ public class PoA {
 		TerrainTexturePack texturePack = new TerrainTexturePack(BGTexture, rTexture, gTexture, bTexture);
 		//----------------------------------------------
 		
-		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap);
-		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap);
+		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmap");
+		Terrain terrain2 = new Terrain(-1, -1, loader, texturePack, blendMap, "heightmap");
 		
 		//---------------------------------------------
 		
@@ -63,8 +63,8 @@ public class PoA {
 		Random rand = new Random();
 		for(int i=0; i<50; i++) {
 			float x = rand.nextFloat() * 1000;
-			float y = -10;
 			float z = rand.nextFloat() * -1000;
+			float y = terrain.getTerrainHeight(x, z);
 			trees.add(new Entity(texturedPalm, new Vector3f(x, y, z), 0, 0, 0, 1));
 		}
 		
@@ -77,20 +77,27 @@ public class PoA {
 		
 		//----------------------------------------------
 		
-		ModelData dragonData = OBJFileLoader.loadOBJ("dragon");
-		RawModel dragonModel = loader.loadToVAO(dragonData.getVertices(), dragonData.getTextureCoords(), dragonData.getNormals(), dragonData.getIndices());
+		ModelData personData = OBJFileLoader.loadOBJ("person");
+		RawModel personModel = loader.loadToVAO(personData.getVertices(), personData.getTextureCoords(), personData.getNormals(), personData.getIndices());
 		
-		TexturedModel dragon = new TexturedModel(dragonModel, new ModelTexture(loader.loadTexture("mud")));
+		TexturedModel person = new TexturedModel(personModel, new ModelTexture(loader.loadTexture("playerTexture")));
 		
-		Buzz buzz = new Buzz(dragon, new Vector3f(1,-10,-10), 0, 0, 0, 1);
+		Buzz buzz = new Buzz(person, new Vector3f(0,0,0), 0, 180, 0, 0.5f);
 		
 		Camera camera = new Camera(buzz);
 		
 		//----------------------------------------------
 		while(!Display.isCloseRequested()) {
 			camera.move();
-			buzz.move();
+			
+			if(terrain.getTerrainHeight(buzz.getPosition().x, buzz.getPosition().z) == 0) {
+				buzz.move(terrain2);
+			}
+			else if(terrain2.getTerrainHeight(buzz.getPosition().x, buzz.getPosition().z) == 0) {
+				buzz.move(terrain);
+			}
 			render.procEntity(buzz);
+			
 			for(Entity tree: trees) {
 				render.procEntity(tree);
 			}
