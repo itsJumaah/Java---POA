@@ -1,6 +1,7 @@
 package buzzdev.shaders;
 
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import buzzdev.entities.Camera;
@@ -21,6 +22,8 @@ public class StaticShader extends ShaderProgram{
 	private int locationReflectivity;
 	private int locationFakeLighting;
 	private int locationSkyColor;
+	private int locationRowNum;
+	private int locationOffset;
 	
 	public StaticShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -44,6 +47,16 @@ public class StaticShader extends ShaderProgram{
 		locationReflectivity = super.getUniformLocation("reflectivity");
 		locationFakeLighting = super.getUniformLocation("fakeLighting");
 		locationSkyColor     = super.getUniformLocation("skyColor");
+		locationRowNum	     = super.getUniformLocation("rowNum");
+		locationOffset	     = super.getUniformLocation("offset");
+	}
+	
+	public void loadRowNum(int rowNum) {
+		super.loadFloat(locationRowNum, rowNum);
+	}
+	
+	public void loadOffset(float x, float y) {
+		super.loadVector(locationOffset, new Vector2f(x,y));
 	}
 	
 	public void loadSkyColor(float r, float g, float b){

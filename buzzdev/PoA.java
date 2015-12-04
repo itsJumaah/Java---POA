@@ -49,7 +49,11 @@ public class PoA {
 		ModelData palmData = OBJFileLoader.loadOBJ("palm");
 		RawModel rawPalm = loader.loadToVAO(palmData.getVertices(), palmData.getTextureCoords(), palmData.getNormals(), palmData.getIndices());
 		
+		ModelTexture palmAtlas = new ModelTexture(loader.loadTexture("palm"));
+		palmAtlas.setRowNum(0);
+		
 		TexturedModel texturedPalm = new TexturedModel(rawPalm, new ModelTexture(loader.loadTexture("palm")));
+		
 		
 		texturedPalm.getTexture().setHasTransparency(true); //no culling
 		texturedPalm.getTexture().setFakeLighting(true); //make all lights even(not shiny)

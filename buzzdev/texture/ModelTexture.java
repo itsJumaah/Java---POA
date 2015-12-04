@@ -10,8 +10,20 @@ public class ModelTexture {
 	private boolean hasTransparency = false;
 	private boolean fakeLighting = false;
 	
+	private int rowNum = 1;
+	
 	public boolean isFakeLighting() {
 		return fakeLighting;
+	}
+	
+	
+
+	public int getRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
 	}
 
 	public void setFakeLighting(boolean fakeLighting) {

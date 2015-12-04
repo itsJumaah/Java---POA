@@ -18,6 +18,9 @@ uniform vec3 lightPos;
 
 uniform float fakeLighting;
 
+uniform float rowNum;
+uniform vec2 offset;
+
 const float den = 0.002;
 const float grad = 7.0;
 
@@ -27,7 +30,7 @@ void main(void) {
 	vec4 posRelativeToCam = viewMatrix * worldPos;
 	
 	gl_Position = projMatrix * posRelativeToCam;
-	pass_textureCoord = textureCoord;
+	pass_textureCoord = (textureCoord/rowNum) + offset;
 	
 	vec3 actualNormal = normal;
 	if(fakeLighting > 0.5) {
