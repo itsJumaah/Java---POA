@@ -26,6 +26,8 @@ import buzzdev.texture.TerrainTexturePack;
 
 public class PoA {
 
+
+	
 	public static void main(String[] args) {
 		
 		DisplayManager.createDisplay();
@@ -49,17 +51,18 @@ public class PoA {
 		ModelData palmData = OBJFileLoader.loadOBJ("palm");
 		RawModel rawPalm = loader.loadToVAO(palmData.getVertices(), palmData.getTextureCoords(), palmData.getNormals(), palmData.getIndices());
 		
-		ModelTexture palmAtlas = new ModelTexture(loader.loadTexture("palm"));
-		palmAtlas.setRowNum(0);
+		ModelTexture palmAtlas = new ModelTexture(loader.loadTexture("atlaspalm"));
+		palmAtlas.setRowNum(2);
 		
-		TexturedModel texturedPalm = new TexturedModel(rawPalm, new ModelTexture(loader.loadTexture("palm")));
+//		palmAtlas.setShineDamper(20); //make it shiny
+//		palmAtlas.setReflectivity(10); //make it shiny
 		
+		TexturedModel texturedPalm = new TexturedModel(rawPalm, palmAtlas);
 		
 		texturedPalm.getTexture().setHasTransparency(true); //no culling
 		texturedPalm.getTexture().setFakeLighting(true); //make all lights even(not shiny)
-//		ModelTexture texture = texturedPalm.getTexture();
-//		texture.setShineDamper(20); //make it shiny
-//		texture.setReflectivity(10); //make it shiny
+
+
 		
 		//----------------------------------------------
 		
@@ -69,7 +72,7 @@ public class PoA {
 			float x = rand.nextFloat() * 1000;
 			float z = rand.nextFloat() * -1000;
 			float y = terrain.getTerrainHeight(x, z);
-			trees.add(new Entity(texturedPalm, new Vector3f(x, y, z), 0, 0, 0, 1));
+			trees.add(new Entity(texturedPalm, 3, new Vector3f(x, y, z), 0, 0, 0, 1));
 		}
 		
 		//----------------------------------------------
@@ -92,6 +95,10 @@ public class PoA {
 		
 		//----------------------------------------------
 		while(!Display.isCloseRequested()) {
+			
+		
+			
+			
 			camera.move();
 			
 			if(terrain.getTerrainHeight(buzz.getPosition().x, buzz.getPosition().z) == 0) {
